@@ -52,8 +52,8 @@ public class GuestController {
             @RequestParam(value = "page", defaultValue = "1") Long page,
             @RequestParam(value = "size", defaultValue = "10") Long size
     ) {
-        List<GuestResponse> letters = guestService.getAllGuests(page, size);
-        return ResponseEntity.ok(letters);
+        List<GuestResponse> guests = guestService.getAllGuests(page, size);
+        return ResponseEntity.ok(guests);
     }
 
     @PutMapping("/{id}")

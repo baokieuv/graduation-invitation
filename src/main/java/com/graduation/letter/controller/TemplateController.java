@@ -16,40 +16,43 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TemplateController {
 
-    private final TemplateService letterService;
+    private final TemplateService templateService;
 
     @PostMapping
-    public ResponseEntity<TemplateResponse> createLetter(
+    public ResponseEntity<TemplateResponse> createTemplate(
             @RequestBody @Valid TemplateRequest request
     ) {
-        TemplateResponse createdLetter = letterService.createTemplate(request);
+        TemplateResponse createdLetter = templateService.createTemplate(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdLetter);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TemplateResponse> getLetterById(@PathVariable("id") String id) {
-        TemplateResponse letter = letterService.getTemplateById(id);
+    public ResponseEntity<TemplateResponse> getTemplateById(@PathVariable("id") String id) {
+        TemplateResponse letter = templateService.getTemplateById(id);
         return ResponseEntity.ok(letter);
     }
 
     @GetMapping
-    public ResponseEntity<List<TemplateResponse>> getAllLetters() {
-        List<TemplateResponse> letters = letterService.getAllTemplates(10L, 10L);
+    public ResponseEntity<List<TemplateResponse>> getAllTemplates(
+            @RequestParam(required = false, defaultValue = "1") Long page,
+            @RequestParam(required = false, defaultValue = "10") Long size
+    ) {
+        List<TemplateResponse> letters = templateService.getAllTemplates(page, size);
         return ResponseEntity.ok(letters);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TemplateResponse> updateLetter(
+    public ResponseEntity<TemplateResponse> updateTemplate(
             @PathVariable("id") String id,
             @RequestBody @Valid TemplateRequest request
     ) {
-        TemplateResponse updatedLetter = letterService.updateTemplate(id, request);
+        TemplateResponse updatedLetter = templateService.updateTemplate(id, request);
         return ResponseEntity.ok(updatedLetter);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteLetter(@PathVariable("id") String id) {
-        letterService.deleteTemplate(id);
+    public ResponseEntity<String> deleteTemplate(@PathVariable("id") String id) {
+        templateService.deleteTemplate(id);
         return ResponseEntity.ok("Template deleted successfully");
     }
 }

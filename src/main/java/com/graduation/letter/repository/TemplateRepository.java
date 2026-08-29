@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface TemplateRepository extends JpaRepository<Template, UUID> {
-    Optional<Template> findById(UUID id);
+    Optional<Template> findByIdAndActiveTrue(UUID id);
 
     List<Template> findAllByActiveTrue(Pageable pageable);
 }

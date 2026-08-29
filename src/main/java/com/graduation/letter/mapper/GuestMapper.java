@@ -9,5 +9,5 @@ import org.mapstruct.Mapper;
 public interface GuestMapper {
     Guest toEntity(GuestRequest request);
 
-    GuestResponse toResponse(Guest letter);
+    GuestResponse toResponse(Guest guest);
 }

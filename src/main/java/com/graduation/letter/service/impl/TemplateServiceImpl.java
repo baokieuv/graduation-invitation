@@ -31,10 +31,10 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public TemplateResponse getTemplateById(String id) {
         UUID uuid = Formatter.parseUUID(id);
-        Template letter = repository.findByIdAndActiveTrue(uuid)
-                .orElseThrow(() -> new RuntimeException("Letter not found with id: " + id));
+        Template template = repository.findByIdAndActiveTrue(uuid)
+                .orElseThrow(() -> new RuntimeException("Template not found with id: " + id));
 
-        return mapper.toResponse(letter);
+        return mapper.toResponse(template);
     }
 
     @Override
@@ -51,10 +51,10 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public void deleteTemplate(String id) {
         UUID uuid = Formatter.parseUUID(id);
-        Template letter = repository.findByIdAndActiveTrue(uuid)
+        Template template = repository.findByIdAndActiveTrue(uuid)
                 .orElseThrow(() -> new RuntimeException("Template not found with id: " + id));
 
-        letter.setActive(false);
-        repository.save(letter);
+        template.setActive(false);
+        repository.save(template);
     }
 }

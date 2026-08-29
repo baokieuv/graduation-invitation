@@ -1,8 +1,8 @@
 package com.graduation.letter.mapper;
 
-import com.graduation.letter.model.letter.Template;
-import com.graduation.letter.model.letter.TemplateRequest;
-import com.graduation.letter.model.letter.TemplateResponse;
+import com.graduation.letter.model.template.Template;
+import com.graduation.letter.model.template.TemplateRequest;
+import com.graduation.letter.model.template.TemplateResponse;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

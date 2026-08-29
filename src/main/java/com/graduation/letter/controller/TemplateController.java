@@ -1,10 +1,12 @@
 package com.graduation.letter.controller;
 
-import com.graduation.letter.model.letter.TemplateRequest;
-import com.graduation.letter.model.letter.TemplateResponse;
+import com.graduation.letter.common.ApiResponse;
+import com.graduation.letter.common.ResponseFactory;
+import com.graduation.letter.common.SuccessCode;
+import com.graduation.letter.model.template.TemplateRequest;
+import com.graduation.letter.model.template.TemplateResponse;
 import com.graduation.letter.service.TemplateService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
@@ -18,41 +20,48 @@ public class TemplateController {
 
     private final TemplateService templateService;
 
+    private final ResponseFactory responseFactory;
+
     @PostMapping
-    public ResponseEntity<TemplateResponse> createTemplate(
+    public ResponseEntity<ApiResponse<Object>> createTemplate(
             @RequestBody @Valid TemplateRequest request
     ) {
         TemplateResponse createdLetter = templateService.createTemplate(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdLetter);
+
+        return responseFactory.success(createdLetter, SuccessCode.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TemplateResponse> getTemplateById(@PathVariable("id") String id) {
+    public ResponseEntity<ApiResponse<Object>> getTemplateById(@PathVariable("id") String id) {
         TemplateResponse letter = templateService.getTemplateById(id);
-        return ResponseEntity.ok(letter);
+
+        return responseFactory.success(letter, SuccessCode.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<TemplateResponse>> getAllTemplates(
+    public ResponseEntity<ApiResponse<Object>> getAllTemplates(
             @RequestParam(required = false, defaultValue = "1") Long page,
             @RequestParam(required = false, defaultValue = "10") Long size
     ) {
         List<TemplateResponse> letters = templateService.getAllTemplates(page, size);
-        return ResponseEntity.ok(letters);
+
+        return responseFactory.success(letters, SuccessCode.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TemplateResponse> updateTemplate(
+    public ResponseEntity<ApiResponse<Object>> updateTemplate(
             @PathVariable("id") String id,
             @RequestBody @Valid TemplateRequest request
     ) {
         TemplateResponse updatedLetter = templateService.updateTemplate(id, request);
-        return ResponseEntity.ok(updatedLetter);
+
+        return responseFactory.success(updatedLetter, SuccessCode.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTemplate(@PathVariable("id") String id) {
+    public ResponseEntity<ApiResponse<Object>> deleteTemplate(@PathVariable("id") String id) {
         templateService.deleteTemplate(id);
-        return ResponseEntity.ok("Template deleted successfully");
+
+        return responseFactory.success("Template deleted successfully", SuccessCode.OK);
     }
 }

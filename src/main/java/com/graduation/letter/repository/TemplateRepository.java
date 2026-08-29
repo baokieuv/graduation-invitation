@@ -1,6 +1,6 @@
 package com.graduation.letter.repository;
 
-import com.graduation.letter.model.letter.Template;
+import com.graduation.letter.model.template.Template;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 

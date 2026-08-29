@@ -1,7 +1,7 @@
 package com.graduation.letter.service;
 
-import com.graduation.letter.model.letter.TemplateRequest;
-import com.graduation.letter.model.letter.TemplateResponse;
+import com.graduation.letter.model.template.TemplateRequest;
+import com.graduation.letter.model.template.TemplateResponse;
 
 import java.util.List;
 

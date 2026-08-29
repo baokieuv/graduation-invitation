@@ -9,9 +9,13 @@ import com.graduation.letter.model.guest.GuestRequest;
 import com.graduation.letter.model.guest.GuestResponse;
 import com.graduation.letter.model.guest.UpdateGuestRequest;
 import com.graduation.letter.repository.GuestRepository;
-import com.graduation.letter.service.GuestService;
+import com.graduation.letter.service.interfaces.GuestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -69,6 +73,7 @@ public class GuestServiceImpl implements GuestService {
     }
 
     @Override
+    @Cacheable(value = "guests", key = "#id")
     public GuestResponse getGuestById(String id) {
         UUID uuid = Formatter.parseUUID(id);
 
@@ -79,6 +84,7 @@ public class GuestServiceImpl implements GuestService {
     }
 
     @Override
+    @Cacheable(value = "guests", key = "#phoneNumber")
     public GuestResponse getGuestByPhoneNumber(String phoneNumber) {
         String normalizedPhoneNumber = Formatter.normalizePhoneNumber(phoneNumber);
 
@@ -103,6 +109,10 @@ public class GuestServiceImpl implements GuestService {
     }
 
     @Override
+    @Caching(
+            put = { @CachePut(value = "guests", key = "#id") },
+            evict = { @CacheEvict(value = "guests", key = "#result.phoneNumber") }
+    )
     public GuestResponse updateGuest(String id, UpdateGuestRequest request) {
 
         UUID uuid = Formatter.parseUUID(id);
@@ -116,6 +126,7 @@ public class GuestServiceImpl implements GuestService {
     }
 
     @Override
+    @CacheEvict(value = "guests", key = "#id")
     public void deleteGuest(String id) {
         UUID uuid = Formatter.parseUUID(id);
 

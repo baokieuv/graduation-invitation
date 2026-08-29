@@ -5,7 +5,7 @@ import com.graduation.letter.common.ResponseFactory;
 import com.graduation.letter.common.SuccessCode;
 import com.graduation.letter.model.template.TemplateRequest;
 import com.graduation.letter.model.template.TemplateResponse;
-import com.graduation.letter.service.TemplateService;
+import com.graduation.letter.service.interfaces.TemplateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

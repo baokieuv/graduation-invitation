@@ -1,4 +1,4 @@
-package com.graduation.letter.service;
+package com.graduation.letter.service.interfaces;
 
 import com.graduation.letter.model.template.TemplateRequest;
 import com.graduation.letter.model.template.TemplateResponse;

@@ -4,14 +4,16 @@ import com.graduation.letter.common.Formatter;
 import com.graduation.letter.exception.ApiException;
 import com.graduation.letter.exception.ErrorCode;
 import com.graduation.letter.mapper.TemplateMapper;
-import com.graduation.letter.model.guest.Guest;
 import com.graduation.letter.model.template.Template;
 import com.graduation.letter.model.template.TemplateRequest;
 import com.graduation.letter.model.template.TemplateResponse;
 import com.graduation.letter.repository.TemplateRepository;
-import com.graduation.letter.service.TemplateService;
+import com.graduation.letter.service.interfaces.TemplateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +37,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
+    @Cacheable(value = "templates", key = "#id")
     public TemplateResponse getTemplateById(String id) {
         UUID uuid = Formatter.parseUUID(id);
         Template template = repository.findByIdAndActiveTrue(uuid)
@@ -58,6 +61,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
+    @CachePut(value = "templates", key = "#id")
     public TemplateResponse updateTemplate(String id, TemplateRequest request) {
 
         Template template = repository.findByIdAndActiveTrue(Formatter.parseUUID(id))
@@ -70,6 +74,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
+    @CacheEvict(value = "templates", key = "#id")
     public void deleteTemplate(String id) {
         UUID uuid = Formatter.parseUUID(id);
         Template template = repository.findByIdAndActiveTrue(uuid)

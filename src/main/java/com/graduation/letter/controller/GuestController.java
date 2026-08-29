@@ -6,7 +6,7 @@ import com.graduation.letter.common.SuccessCode;
 import com.graduation.letter.model.guest.GuestRequest;
 import com.graduation.letter.model.guest.GuestResponse;
 import com.graduation.letter.model.guest.UpdateGuestRequest;
-import com.graduation.letter.service.GuestService;
+import com.graduation.letter.service.interfaces.GuestService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

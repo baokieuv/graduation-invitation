@@ -1,4 +1,4 @@
-package com.graduation.letter.service;
+package com.graduation.letter.service.interfaces;
 
 import com.graduation.letter.model.guest.GuestRequest;
 import com.graduation.letter.model.guest.GuestResponse;

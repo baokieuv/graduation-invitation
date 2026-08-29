@@ -87,10 +87,11 @@ public class GuestServiceImpl implements GuestService {
     }
 
     @Override
-    public List<GuestResponse> getAllGuests(Long page, Long size) {
+        if (page == null || page < 1 || size == null || size < 1) {
+            throw new IllegalArgumentException("page and size must be >= 1");
+        }
 
-        Pageable pageable = Pageable.ofSize(size.intValue()).withPage(page.intValue() - 1);
-
+        Pageable pageable = Pageable.ofSize(Math.toIntExact(size)).withPage(Math.toIntExact(page - 1));
         List<Guest> guests = guestRepository.findAllByActiveTrue(pageable);
 
         return guests.stream()

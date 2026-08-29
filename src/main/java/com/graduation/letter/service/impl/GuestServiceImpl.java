@@ -87,6 +87,7 @@ public class GuestServiceImpl implements GuestService {
     }
 
     @Override
+    public List<GuestResponse> getAllGuests(Long page, Long size) {
         if (page == null || page < 1 || size == null || size < 1) {
             throw new IllegalArgumentException("page and size must be >= 1");
         }

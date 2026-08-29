@@ -33,6 +33,10 @@ public final class Formatter {
     }
 
     public static UUID parseUUID(String uuidString) {
+        if (uuidString == null || uuidString.trim().isEmpty()) {
+            throw new IllegalArgumentException("UUID string cannot be null or empty");
+        }
+
         try {
             return UUID.fromString(uuidString);
         } catch (IllegalArgumentException e) {

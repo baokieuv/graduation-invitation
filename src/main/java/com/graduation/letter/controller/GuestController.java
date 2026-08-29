@@ -2,6 +2,7 @@ package com.graduation.letter.controller;
 
 import com.graduation.letter.model.guest.GuestRequest;
 import com.graduation.letter.model.guest.GuestResponse;
+import com.graduation.letter.model.guest.UpdateGuestRequest;
 import com.graduation.letter.service.GuestService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,14 @@ public class GuestController {
 
     private final GuestService guestService;
 
+    @PostMapping("/import")
+    public ResponseEntity<List<GuestResponse>> importGuests(
+            @RequestBody @Valid List<GuestRequest> requests
+    ) {
+        List<GuestResponse> createdGuests = guestService.importGuests(requests);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdGuests);
+    }
+
     @PostMapping
     public ResponseEntity<GuestResponse> createGuest(
             @RequestBody @Valid GuestRequest request
@@ -32,7 +41,7 @@ public class GuestController {
         return ResponseEntity.ok(letter);
     }
 
-    @GetMapping
+    @GetMapping(params = "phoneNumber")
     public ResponseEntity<GuestResponse> getGuestByPhoneNumber(@RequestParam("phoneNumber") String phoneNumber) {
         GuestResponse letter = guestService.getGuestByPhoneNumber(phoneNumber);
         return ResponseEntity.ok(letter);
@@ -50,7 +59,7 @@ public class GuestController {
     @PutMapping("/{id}")
     public ResponseEntity<GuestResponse> updateGuest(
             @PathVariable("id") String id,
-            @RequestBody @Valid GuestRequest request
+            @RequestBody @Valid UpdateGuestRequest request
     ) {
         GuestResponse updatedLetter = guestService.updateGuest(id, request);
         return ResponseEntity.ok(updatedLetter);

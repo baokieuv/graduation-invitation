@@ -30,8 +30,9 @@ public class SecurityConfig {
 
                 // 3. Define URL protection rules
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/public/**").permitAll()   // No key required
-                        .requestMatchers("/api/secure/**").authenticated() // Key required
+                        .requestMatchers("/api/v1/templates/**").authenticated()
+                        .requestMatchers("/api/v1/guests/**").authenticated()
+                        .requestMatchers("/api/v1/invitations/**").permitAll()
                         .anyRequest().authenticated()                      // Default to secure
                 )
 

@@ -2,7 +2,10 @@ package com.graduation.letter.common;
 
 import java.util.UUID;
 
-public class Formatter {
+public final class Formatter {
+
+    private Formatter() {
+    }
 
     public static String normalizePhoneNumber(String phoneNumber) {
         if (phoneNumber == null || phoneNumber.trim().isEmpty()) {

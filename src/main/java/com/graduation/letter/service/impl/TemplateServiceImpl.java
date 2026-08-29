@@ -1,5 +1,6 @@
 package com.graduation.letter.service.impl;
 
+import com.graduation.letter.common.Formatter;
 import com.graduation.letter.mapper.TemplateMapper;
 import com.graduation.letter.model.letter.Template;
 import com.graduation.letter.model.letter.TemplateRequest;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +30,8 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public TemplateResponse getTemplateById(String id) {
-        Template letter = repository.findById(java.util.UUID.fromString(id))
+        UUID uuid = Formatter.parseUUID(id);
+        Template letter = repository.findByIdAndActiveTrue(uuid)
                 .orElseThrow(() -> new RuntimeException("Letter not found with id: " + id));
 
         return mapper.toResponse(letter);
@@ -47,8 +50,9 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public void deleteTemplate(String id) {
-        Template letter = repository.findById(java.util.UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("Letter not found with id: " + id));
+        UUID uuid = Formatter.parseUUID(id);
+        Template letter = repository.findByIdAndActiveTrue(uuid)
+                .orElseThrow(() -> new RuntimeException("Template not found with id: " + id));
 
         letter.setActive(false);
         repository.save(letter);

@@ -1,6 +1,8 @@
 package com.graduation.letter.service.impl;
 
 import com.graduation.letter.common.Formatter;
+import com.graduation.letter.exception.ApiException;
+import com.graduation.letter.exception.ErrorCode;
 import com.graduation.letter.mapper.GuestMapper;
 import com.graduation.letter.model.guest.Guest;
 import com.graduation.letter.model.guest.GuestRequest;
@@ -23,7 +25,6 @@ public class GuestServiceImpl implements GuestService {
     private final GuestRepository guestRepository;
 
     private final GuestMapper guestMapper;
-
 
     @Override
     public List<GuestResponse> importGuests(List<GuestRequest> requests) {
@@ -57,7 +58,8 @@ public class GuestServiceImpl implements GuestService {
 
         if (existingGuest.isPresent()) {
             log.info("Guest with phone number {} already exists", phoneNumber);
-            return null;
+
+            throw new ApiException(ErrorCode.RESOURCE_ALREADY_EXISTS, "Guest with phone number " + phoneNumber + " already exists");
         }
 
         Guest guest = guestMapper.toEntity(request);
@@ -71,7 +73,7 @@ public class GuestServiceImpl implements GuestService {
         UUID uuid = Formatter.parseUUID(id);
 
         Guest guest = guestRepository.findByIdAndActiveTrue(uuid)
-                .orElseThrow(() -> new RuntimeException("Guest not found with id: " + id));
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Guest not found with id: " + id));
 
         return guestMapper.toResponse(guest);
     }
@@ -81,7 +83,7 @@ public class GuestServiceImpl implements GuestService {
         String normalizedPhoneNumber = Formatter.normalizePhoneNumber(phoneNumber);
 
         Guest guest = guestRepository.findByPhoneNumberAndActiveTrue(normalizedPhoneNumber)
-                .orElseThrow(() -> new RuntimeException("Guest not found with phone number: " + phoneNumber));
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Guest not found with phone number: " + phoneNumber));
 
         return guestMapper.toResponse(guest);
     }
@@ -106,7 +108,7 @@ public class GuestServiceImpl implements GuestService {
         UUID uuid = Formatter.parseUUID(id);
 
         Guest guest = guestRepository.findByIdAndActiveTrue(uuid)
-                .orElseThrow(() -> new RuntimeException("Guest not found with id: " + id));
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Guest not found with id: " + id));
 
         guest.setName(request.name());
 
@@ -118,7 +120,7 @@ public class GuestServiceImpl implements GuestService {
         UUID uuid = Formatter.parseUUID(id);
 
         Guest guest = guestRepository.findByIdAndActiveTrue(uuid)
-                .orElseThrow(() -> new RuntimeException("Guest not found with id: " + id));
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Guest not found with id: " + id));
 
         guest.setActive(false);
         guestRepository.save(guest);

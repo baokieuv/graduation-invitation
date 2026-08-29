@@ -37,8 +37,8 @@ public class GuestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GuestResponse> getGuestById(@PathVariable("id") String id) {
-        GuestResponse letter = guestService.getGuestById(id);
-        return ResponseEntity.ok(letter);
+        GuestResponse guest = guestService.getGuestById(id);
+        return ResponseEntity.ok(guest);
     }
 
     @GetMapping(params = "phoneNumber")

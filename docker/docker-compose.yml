@@ -1,16 +1,59 @@
 services:
-  postgres:
-    image: postgres:16
-    container_name: postgres_db
+  mariadb:
+    image: mariadb:lts
+    container_name: mariadb_db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - ./mariadb_data:/var/lib/mysql
+    networks:
+      - graduation_network
 
-volumes:
-  postgres_data:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared_tunnel
+    restart: unless-stopped
+    command: tunnel --config /etc/cloudflared/config.yml run
+    volumes:
+      - ./cloudflared/config.yml:/etc/cloudflared/config.yml:ro
+      - ./cloudflared/d1ebb6d2-bb41-46ee-a24b-c18a2f68d540.json:/etc/cloudflared/d1ebb6d2-bb41-46ee-a24b-c18a2f68d540.json:ro
+    networks:
+      - graduation_network
+
+  backend:
+    build:
+      context: ./../server
+      dockerfile: Dockerfile
+    container_name: backend_service
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - mariadb
+    networks:
+      - graduation_network
+
+  frontend:
+    build:
+      context: ./../frontend
+      dockerfile: Dockerfile
+    container_name: frontend_service
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - NEXT_PUBLIC_API_URL=https://api.kvbhust.id.vn
+    depends_on:
+      - backend
+    networks:
+      - graduation_network
+
+networks:
+  graduation_network:
+    driver: bridge

@@ -1,6 +1,7 @@
 package com.graduation.letter.controller;
 
 import com.graduation.letter.common.ApiResponse;
+import com.graduation.letter.common.Formatter;
 import com.graduation.letter.common.ResponseFactory;
 import com.graduation.letter.common.SuccessCode;
 import com.graduation.letter.model.invitation.InvitationResponse;
@@ -23,9 +24,11 @@ public class InvitationController {
 
     private final ResponseFactory responseFactory;
 
-    @GetMapping(params = "phoneNumber")
-    public ResponseEntity<ApiResponse<Object>> getInvitation(@RequestParam("phoneNumber") String phoneNumber) {
-        InvitationResponse response = invitationService.getInvitation(phoneNumber);
+    @GetMapping(params = "identifier")
+    public ResponseEntity<ApiResponse<Object>> getInvitation(@RequestParam("identifier") String identifier) {
+        String normalizedPhoneNumber = Formatter.normalizeIdentifier(identifier);
+
+        InvitationResponse response = invitationService.getInvitation(normalizedPhoneNumber);
 
         return responseFactory.success(response, SuccessCode.OK);
     }

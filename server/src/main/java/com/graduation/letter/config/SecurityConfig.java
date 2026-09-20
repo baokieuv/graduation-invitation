@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/templates/**").authenticated()
                         .requestMatchers("/api/v1/guests/**").authenticated()
-                        .requestMatchers("/api/v1/invitations/**").permitAll()
+                        .requestMatchers("/api/v1/invitation/**").permitAll()
                         .anyRequest().authenticated()                      // Default to secure
                 )
 

@@ -1,6 +1,7 @@
 package com.graduation.letter.controller;
 
 import com.graduation.letter.common.ApiResponse;
+import com.graduation.letter.common.Formatter;
 import com.graduation.letter.common.ResponseFactory;
 import com.graduation.letter.common.SuccessCode;
 import com.graduation.letter.model.guest.GuestRequest;
@@ -49,7 +50,9 @@ public class GuestController {
 
     @GetMapping(params = "phoneNumber")
     public ResponseEntity<ApiResponse<Object>> getGuestByPhoneNumber(@RequestParam("phoneNumber") String phoneNumber) {
-        GuestResponse letter = guestService.getGuestByPhoneNumber(phoneNumber);
+        String normalizedPhoneNumber = Formatter.normalizeIdentifier(phoneNumber);
+
+        GuestResponse letter = guestService.getGuestByPhoneNumber(normalizedPhoneNumber);
         return responseFactory.success(letter, SuccessCode.OK);
     }
 

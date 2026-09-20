@@ -9,6 +9,18 @@ public record GuestResponse(
 
         String phoneNumber,
 
+        String type,
+
         Map<String, String> additionalInfo
+
 ) {
+    public GuestResponse(Guest guest) {
+        this(
+                guest.getId().toString(),
+                guest.getName(),
+                guest.getPhoneNumber(),
+                guest.getType().name(),
+                guest.getAdditionalInfo()
+        );
+    }
 }

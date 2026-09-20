@@ -1,9 +1,9 @@
 package com.graduation.letter.service.impl;
 
 import com.graduation.letter.common.Formatter;
+import com.graduation.letter.common.GuestType;
 import com.graduation.letter.exception.ApiException;
 import com.graduation.letter.exception.ErrorCode;
-import com.graduation.letter.mapper.TemplateMapper;
 import com.graduation.letter.model.template.Template;
 import com.graduation.letter.model.template.TemplateRequest;
 import com.graduation.letter.model.template.TemplateResponse;
@@ -27,13 +27,23 @@ public class TemplateServiceImpl implements TemplateService {
 
     private final TemplateRepository repository;
 
-    private final TemplateMapper mapper;
+    @Override
+    public List<TemplateResponse> importTemplates(List<TemplateRequest> templates) {
+        List<Template> savedTemplates = templates.stream()
+                .map(Template::new)
+                .map(repository::save)
+                .toList();
+
+        return savedTemplates.stream()
+                .map(TemplateResponse::new)
+                .toList();
+    }
 
     @Override
     public TemplateResponse createTemplate(TemplateRequest template) {
-        Template newTemplate = mapper.toEntity(template);
+        Template newTemplate = new Template(template);
         Template savedTemplate = repository.save(newTemplate);
-        return mapper.toResponse(savedTemplate);
+        return new TemplateResponse(savedTemplate);
     }
 
     @Override
@@ -43,7 +53,7 @@ public class TemplateServiceImpl implements TemplateService {
         Template template = repository.findByIdAndActiveTrue(uuid)
                 .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Template not found with id: " + id));
 
-        return mapper.toResponse(template);
+        return new TemplateResponse(template);
     }
 
     @Override
@@ -56,7 +66,23 @@ public class TemplateServiceImpl implements TemplateService {
         List<Template> templates = repository.findAllByActiveTrue(pageable);
 
         return templates.stream()
-                .map(mapper::toResponse)
+                .map(TemplateResponse::new)
+                .toList();
+    }
+
+    @Override
+    public List<TemplateResponse> getAllTemplates(Long page, Long size, GuestType type) {
+        if (page == null || page < 1 || size == null || size < 1) {
+            throw new IllegalArgumentException("page and size must be >= 1");
+        }
+
+        Pageable pageable = Pageable.ofSize(Math.toIntExact(size)).withPage(Math.toIntExact(page - 1));
+        List<Template> templates;
+
+        templates = repository.findAllByTypeAndActiveTrue(type, pageable);
+
+        return templates.stream()
+                .map(TemplateResponse::new)
                 .toList();
     }
 
@@ -70,7 +96,9 @@ public class TemplateServiceImpl implements TemplateService {
         template.setTitle(request.title());
         template.setTemplate(request.template());
 
-        return mapper.toResponse(repository.save(template));
+        Template savedTemplate = repository.save(template);
+
+        return new TemplateResponse(savedTemplate);
     }
 
     @Override

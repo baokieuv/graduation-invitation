@@ -7,6 +7,7 @@ import com.graduation.letter.model.template.TemplateRequest;
 import com.graduation.letter.model.template.TemplateResponse;
 import com.graduation.letter.service.interfaces.TemplateService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
@@ -21,6 +22,13 @@ public class TemplateController {
     private final TemplateService templateService;
 
     private final ResponseFactory responseFactory;
+
+    @PostMapping("/import")
+    public ResponseEntity<ApiResponse<Object>> importTemplates(@RequestBody List<TemplateRequest> requests) {
+        List<TemplateResponse> createdTemplates = templateService.importTemplates(requests);
+
+        return responseFactory.success(createdTemplates, SuccessCode.CREATED);
+    }
 
     @PostMapping
     public ResponseEntity<ApiResponse<Object>> createTemplate(

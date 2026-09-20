@@ -16,9 +16,11 @@ public interface GuestService {
 
     GuestResponse getGuestByPhoneNumber(String phoneNumber);
 
+    GuestResponse getGuestByPhoneNumber(String phoneNumber, Boolean throwIfNotFound);
+
     List<GuestResponse> getAllGuests(Long page, Long size);
 
     GuestResponse updateGuest(String id, UpdateGuestRequest request);
 
-    void deleteGuest(String id);
+    GuestResponse deleteGuest(String id);
 }

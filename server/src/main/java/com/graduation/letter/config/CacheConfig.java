@@ -19,7 +19,7 @@ public class CacheConfig {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager();
 
         // You can explicitly list your cache names here
-        cacheManager.setCacheNames(List.of("templates", "guests"));
+        cacheManager.setCacheNames(List.of("templates", "guests", "config"));
 
         // Define the global Caffeine configuration
         cacheManager.setCaffeine(Caffeine.newBuilder()

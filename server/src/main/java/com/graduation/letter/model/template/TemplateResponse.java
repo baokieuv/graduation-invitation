@@ -9,6 +9,18 @@ public record TemplateResponse(
 
         String template,
 
+        String type,
+
         List<String> placeholders
 ) {
+
+    public TemplateResponse(Template template) {
+        this(
+                template.getId().toString(),
+                template.getTitle(),
+                template.getTemplate(),
+                template.getType().name(),
+                template.getPlaceholders()
+        );
+    }
 }

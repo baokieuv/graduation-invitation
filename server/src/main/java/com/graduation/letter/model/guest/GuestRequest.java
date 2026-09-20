@@ -10,6 +10,8 @@ public record GuestRequest(
         @NotBlank(message = "Phone number is required")
         String phoneNumber,
 
+        String type,
+
         Map<String, String> additionalInfo
 ) {
 }

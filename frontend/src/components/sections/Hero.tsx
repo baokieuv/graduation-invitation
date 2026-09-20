@@ -205,7 +205,8 @@ export default function Hero({ identifier, onIdentifierChange, onLookup, loading
                 {loading ? t.lookingUp : t.lookup}
               </button>
             </div>
-            {error && <p className="mt-2 text-sm text-red-200" role="alert">{error}</p>}
+            
+            {false && <p className="mt-2 text-sm text-red-200"  role="alert">{error}</p>}
           </form>
         </motion.div>
       </div>

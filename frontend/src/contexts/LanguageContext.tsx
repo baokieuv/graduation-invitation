@@ -117,7 +117,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   return (
     <LanguageContext.Provider value={{ language, setLanguage: changeLanguage, t: translations[language] }}>
       {children}
-      {/* <LanguageSwitcher language={language} setLanguage={changeLanguage} t={translations[language]} /> */}
+      <LanguageSwitcher language={language} setLanguage={changeLanguage} t={translations[language]} />
     </LanguageContext.Provider>
   );
 }
@@ -126,7 +126,9 @@ function LanguageSwitcher({ language, setLanguage, t }: { language: Language; se
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="fixed bottom-5 right-5 z-[100]">
+    <>
+    {false && (
+    <div className="fixed bottom-5 right-5 z-[100] disabled">
       {open && (
         <div className="mb-3 w-44 rounded-xl border border-yellow-200 bg-white p-2 shadow-xl" role="menu" aria-label={t.languageLabel}>
           <button
@@ -155,6 +157,8 @@ function LanguageSwitcher({ language, setLanguage, t }: { language: Language; se
         <GlobeAltIcon className="h-6 w-6" />
       </button>
     </div>
+    )}
+    </>
   );
 }
 

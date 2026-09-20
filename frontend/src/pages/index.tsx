@@ -10,7 +10,7 @@ import AOS from 'aos';
 // import 'aos/dist/aos.css';
 import { useRouter } from 'next/router';
 import { InvitationLetter } from '@/types/letter';
-import { getDefaultLetter, lookupMockLetter } from '@/services/letter-api';
+import { getDefaultLetter, lookupLetter } from '@/services/letter-api';
 import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
 
 const HomeContent: NextPage = () => {
@@ -59,29 +59,7 @@ const HomeContent: NextPage = () => {
     setLookupError('');
 
     try {
-      if (!process.env.NEXT_PUBLIC_LETTER_API_URL) {
-        setLetter(await lookupMockLetter(trimmedValue));
-        scrollToLetter();
-        return;
-      }
-
-      const response = await fetch(process.env.NEXT_PUBLIC_LETTER_API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ identifier: trimmedValue })
-      });
-      const payload = await response.json();
-      if (!response.ok) throw new Error(payload.message || 'We could not find your letter.');
-
-      const result = payload.letter || payload.data || payload;
-      const body = typeof result === 'string' ? result : result.body || result.message || result.content;
-      if (!body) throw new Error('The letter response is missing its message.');
-      setLetter({
-        recipient: result.recipient || result.recipientName || result.name || trimmedValue,
-        greeting: result.greeting,
-        body,
-        signature: result.signature
-      });
+      setLetter(await lookupLetter(trimmedValue));
       scrollToLetter();
     } catch {
       setLookupError(t.lookupFallback);

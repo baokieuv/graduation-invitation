@@ -1,6 +1,6 @@
 import { InvitationLetter } from '@/types/letter';
 
-const INVITATION_API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1/invitation';
+const INVITATION_API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.kvbhust.id.vn/api/v1/invitation';
 
 // const INVITATION_API_URL = 'http://localhost:8080/api/v1/invitation';
 
